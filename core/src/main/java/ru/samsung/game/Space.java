@@ -2,7 +2,7 @@ package ru.samsung.game;
 
 import static ru.samsung.game.Main.*;
 
-public class Space extends SpaceObject{
+public class Space extends Object{
 
     public Space(float x, float y) {
         super(x, y);

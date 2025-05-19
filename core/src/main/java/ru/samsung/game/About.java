@@ -10,16 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Align;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class About implements Screen {
 
@@ -61,8 +51,8 @@ public class About implements Screen {
         // Отрисовка
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "MENU", 300, 1500);
         batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);
+        font.draw(batch, "ABOUT", 250, 1500);
         btnBack.font.draw(batch,btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }

@@ -78,6 +78,12 @@ public class Menu implements Screen {
         btnAbout.font.draw(batch,btnAbout.text, btnAbout.x, btnAbout.y);
         btnExit.font.draw(batch,btnExit.text, btnExit.x, btnExit.y);
         batch.end();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

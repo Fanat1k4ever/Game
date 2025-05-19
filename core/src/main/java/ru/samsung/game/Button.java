@@ -21,7 +21,6 @@ public class Button {
         width = glyphLayout.width;
         height = glyphLayout.height;
     }
-
     public Button(BitmapFont font, String text, float y) {
         this.font = font;
         this.text = text;
@@ -37,7 +36,6 @@ public class Button {
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
         width = glyphLayout.width;
     }
-
     public void setFont(BitmapFont font){
         this.font = font;
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
@@ -48,7 +46,6 @@ public class Button {
     boolean hit(float tx, float ty){
         return x<tx && tx<x+width && y>ty && ty>y-height;
     }
-
     boolean hit(Vector3 t){
         return x<t.x && t.x<x+width && y>t.y && t.y>y-height;
     }
