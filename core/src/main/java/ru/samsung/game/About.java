@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 
 public class About implements Screen {
 
@@ -52,7 +53,11 @@ public class About implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        font.draw(batch, "ABOUT", 250, 1500);
+        font.draw(batch, "ABOUT", 0, 1500,SCR_WIDTH, Align.center, true);
+        font.draw(batch, "GAME", 0, 1200,SCR_WIDTH, Align.center, true);
+        font.draw(batch, "MADE", 0, 1100,SCR_WIDTH, Align.center, true);
+        font.draw(batch, "BY", 0, 1000,SCR_WIDTH, Align.center, true);
+        font.draw(batch, "KIRILL DENISOV", 0, 900 ,SCR_WIDTH, Align.center, true);
         btnBack.font.draw(batch,btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
