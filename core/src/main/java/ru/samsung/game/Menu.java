@@ -22,7 +22,6 @@ public class Menu implements Screen {
     Texture imgBG;
     Button btnPlay;
     Button btnSettings;
-    Button btnLeaderboard;
     Button btnAbout;
     Button btnExit;
 

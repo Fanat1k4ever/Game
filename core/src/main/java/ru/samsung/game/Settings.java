@@ -3,7 +3,6 @@ package ru.samsung.game;
 import static ru.samsung.game.Main.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,9 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Predicate;
 
-import java.util.prefs.PreferenceChangeEvent;
 
 public class Settings implements Screen {
 
@@ -82,7 +79,6 @@ public class Settings implements Screen {
                 main.setScreen(main.menu);
             }
         }
-        // Отрисовка
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);

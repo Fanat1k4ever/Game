@@ -49,7 +49,6 @@ public class About implements Screen {
                 main.setScreen(main.menu);
             }
         }
-        // Отрисовка
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);

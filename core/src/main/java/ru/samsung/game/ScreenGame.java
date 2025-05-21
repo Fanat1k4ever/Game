@@ -4,7 +4,6 @@ import static ru.samsung.game.Main.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -34,9 +33,6 @@ public class ScreenGame implements Screen {
     Texture currentLivesTexture;
     Texture imgBG;
     Texture imgH3;
-    Texture imgH2;
-    Texture imgH1;
-    Texture imgH0;
     Texture imgAstro;
     Texture imgEnemyAtlas;
     TextureRegion[][] imgEnemy = new TextureRegion[4][27];
@@ -95,7 +91,6 @@ public class ScreenGame implements Screen {
 
     @Override
     public void render(float delta) {
-        // касания
         if (Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
@@ -108,7 +103,7 @@ public class ScreenGame implements Screen {
             astron.vx = -Gdx.input.getAccelerometerX() * 5;
             astron.vy = -Gdx.input.getAccelerometerY() * 5;
         }
-        // события
+
         for (Space s : space) s.move();
         timeCurrent = TimeUtils.millis() - timeStartGame;
         spawnEnemy();
@@ -144,10 +139,6 @@ public class ScreenGame implements Screen {
         batch.end();
     }
 
-    private void gameOver(String name) {
-        players[players.length-1].name = name;
-        players[players.length-1].time = timeCurrent;
-    }
 
     @Override
     public void resize(int width, int height) {

@@ -13,7 +13,6 @@ public class Main extends Game {
     public static final int SCREEN = 0, ACCELEROMETER = 2;
     public static int controls = SCREEN;
     public static boolean isSoundOn = true;
-    public Player[] players;
 
     public SpriteBatch batch;
     public OrthographicCamera camera;
