@@ -9,17 +9,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 public class Astron extends Object{
-    private Rectangle bounds;
-    private int lives = 3;
-    private boolean isInvincible = false;
-    private float invincibleTimer = 0;
 
     public Astron(float x, float y){
         super(x,y);
-        width = 200;
-        height = 200;
-        bounds = new Rectangle(x, y, width, height);
-        this.lives = 3;
+        width = 150;
+        height = 170;
     }
 
     public float scrX(){
@@ -62,40 +56,6 @@ public class Astron extends Object{
         }
     }
 
-    public boolean isInvincible() {
-        return isInvincible;
-    }
-
-    public void loseLife() {
-        if (!isInvincible && lives > 0) {
-            lives--;
-            isInvincible = true;
-            invincibleTimer = 2.0f;
-        }
-    }
-    public void update(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) bounds.y += 200 * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) bounds.y -= 200 * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) bounds.x -= 200 * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) bounds.x += 200 * delta;
-
-        // Таймер неуязвимости
-        if (isInvincible) {
-            invincibleTimer -= delta;
-            if (invincibleTimer <= 0) isInvincible = false;
-        }
-    }
-
-    public Rectangle getBounds() {
-        if (bounds == null) {
-            bounds = new Rectangle(x, y, width, height);
-        }
-        return bounds;
-    }
-
-    public int getLives() {
-        return lives;
-    }
     public void stop(){
         vx = 0;
         vy = 0;

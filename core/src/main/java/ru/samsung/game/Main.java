@@ -13,6 +13,7 @@ public class Main extends Game {
     public static final int SCREEN = 0, ACCELEROMETER = 2;
     public static int controls = SCREEN;
     public static boolean isSoundOn = true;
+    public Player[] players;
 
     public SpriteBatch batch;
     public OrthographicCamera camera;
@@ -21,13 +22,13 @@ public class Main extends Game {
     public BitmapFont font100dark;
     public BitmapFont font70dark;
     public BitmapFont font70;
+    public BitmapFont fontnew;
 
     public Menu menu;
     public ScreenGame screenGame;
     public Settings settings;
-    public LeaderBoard leaderBoard;
     public About about;
-
+    Player player;
 
     @Override
     public void create() {
@@ -39,11 +40,12 @@ public class Main extends Game {
         font100dark = new BitmapFont(Gdx.files.internal("font100dark.fnt"));
         font70dark = new BitmapFont(Gdx.files.internal("font70dark.fnt"));
         font70 = new BitmapFont(Gdx.files.internal("font70.fnt"));
+        fontnew = new BitmapFont(Gdx.files.internal("fntg.fnt"));
 
+        player = new Player();
         menu = new Menu(this);
         screenGame = new ScreenGame(this);
         settings = new Settings(this);
-        leaderBoard = new LeaderBoard(this);
         about = new About(this);
         setScreen(menu);
     }

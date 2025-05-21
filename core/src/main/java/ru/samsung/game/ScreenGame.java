@@ -4,24 +4,20 @@ import static ru.samsung.game.Main.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ScreenGame implements Screen {
@@ -31,7 +27,9 @@ public class ScreenGame implements Screen {
     private OrthographicCamera camera;
     private Vector3 touch;
     private BitmapFont font;
+    private BitmapFont fontnew;
     private boolean isGameOver;
+    private long timeStartGame, timeCurrent;
 
     Texture currentLivesTexture;
     Texture imgBG;
@@ -41,12 +39,10 @@ public class ScreenGame implements Screen {
     Texture imgH0;
     Texture imgAstro;
     Texture imgEnemyAtlas;
-    TextureRegion[][] imgEnemy = new TextureRegion[3][27];
+    TextureRegion[][] imgEnemy = new TextureRegion[4][27];
 
     Button btnBack;
 
-    Sound sndHitAlien;
-    Sound sndHitCan;
     Sound sndHit;
     Music music;
     Sound sndDead;
@@ -54,8 +50,9 @@ public class ScreenGame implements Screen {
     Space[] space = new Space[2];
     Astron astron;
     List<Enemy> enemies = new ArrayList<>();
+    Player[] players = new Player[10];
 
-    private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 100;
+    private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 1500;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -63,13 +60,11 @@ public class ScreenGame implements Screen {
         camera = main.camera;
         touch = main.touch;
         font = main.font;
+        fontnew = main.fontnew;
         Gdx.input.setInputProcessor(new Processor());
+        timeCurrent = 0;
 
         imgBG = new Texture("Game.jpg");
-        imgH3 = new Texture("h3.png");
-        imgH2 = new Texture("h2.png");
-        imgH1 = new Texture("h1.png");
-        imgH0 = new Texture("h0.png");
         currentLivesTexture = imgH3;
         imgAstro = new Texture("astron.png");
         imgEnemyAtlas = new Texture("enemy_atlas.png");
@@ -78,9 +73,10 @@ public class ScreenGame implements Screen {
                 imgEnemy[j][i] = new TextureRegion(imgEnemyAtlas, (i<15?i:27-i)*36, (j+1)*36, 36, 36);
             }
         }
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player();
+        }
         sndHit = Gdx.audio.newSound(Gdx.files.internal("classic_hurt.mp3"));
-        sndHitAlien = Gdx.audio.newSound(Gdx.files.internal("alien.mp3"));
-        sndHitCan = Gdx.audio.newSound(Gdx.files.internal("garbagecan.mp3"));
         sndDead = Gdx.audio.newSound(Gdx.files.internal("dead.mp3"));
         btnBack = new Button(font, "X", 820,1575);
         space[0] =new Space(0,0);
@@ -90,6 +86,11 @@ public class ScreenGame implements Screen {
 
     @Override
     public void show() {
+        timeStartGame = TimeUtils.millis();
+        isGameOver = false;
+        astron = new Astron(SCR_WIDTH/2, 200);
+        main.player.clear();
+        enemies.clear();
     }
 
     @Override
@@ -107,16 +108,19 @@ public class ScreenGame implements Screen {
             astron.vx = -Gdx.input.getAccelerometerX() * 5;
             astron.vy = -Gdx.input.getAccelerometerY() * 5;
         }
-
         // события
         for (Space s : space) s.move();
+        timeCurrent = TimeUtils.millis() - timeStartGame;
         spawnEnemy();
         for (int i = enemies.size() - 1; i >= 0; i--) {
             enemies.get(i).move();
-            if (enemies.get(i).outOfScreen() || enemies.get(i).overlap(astron)) {
+            if (enemies.get(i).overlap(astron)) {
                 enemies.remove(i);
-                sndDead.play();
+                if (isSoundOn) sndDead.play();
                 if (!isGameOver) gameOver();
+            }
+            if (enemies.get(i).outOfScreen()) {
+                enemies.remove(i);
             }
         }
         if (!isGameOver) {
@@ -131,34 +135,18 @@ public class ScreenGame implements Screen {
             batch.draw(imgEnemy[e.type][e.phase], e.scrX(), e.scrY(), e.width, e.height);
         }
         batch.draw(imgAstro, astron.scrX(), astron.scrY(), astron.width, astron.height);
+        fontnew.draw(batch, "Score: "+ showTime(timeCurrent), 10, 1580);
         if(isGameOver){
             font.draw(batch, "GAME OVER", 0, 1300, SCR_WIDTH, Align.center, true);
+            timeStartGame = TimeUtils.millis();
         }
-        /*for (int i = 0; i < ship.hp; i++) {
-            batch.draw(imgShip, SCR_WIDTH-i*70-140, 1600-70, 60, 60);
-        }*/
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
-    private void updateLivesTexture() {
-        switch (astron.getLives()) {
-            case 3:
-                currentLivesTexture = imgH3;
-                batch.draw(imgH3,0,1200);
-                break;
-            case 2:
-                currentLivesTexture = imgH2;
-                batch.draw(imgH2,0,1200);
-                break;
-            case 1:
-                currentLivesTexture = imgH1;
-                batch.draw(imgH1,0,1200);
-                break;
-            case 0:
-                currentLivesTexture = imgH0;
-                batch.draw(imgH0,0,1200);
-                break;
-        }
+
+    private void gameOver(String name) {
+        players[players.length-1].name = name;
+        players[players.length-1].time = timeCurrent;
     }
 
     @Override
@@ -179,6 +167,12 @@ public class ScreenGame implements Screen {
     @Override
     public void hide() {
 
+    }
+    String showTime(long time){
+        long msec = (time % 1000) / 10;
+        long sec = (time / 1000) % 60;
+        long min = (time / (1000 * 60)) % 60;
+        return String.format("%02d:%02d:%02d", min, sec, msec);
     }
 
     private void spawnEnemy() {
@@ -257,16 +251,10 @@ public class ScreenGame implements Screen {
     @Override
     public void dispose() {
         if (batch != null) batch.dispose();
-        if (imgH0 != null) imgH0.dispose();
         if (imgAstro != null) imgAstro.dispose();
         if (imgBG != null) imgBG.dispose();
-        if (imgH1 != null) imgH1.dispose();
         if (imgEnemyAtlas != null) imgEnemyAtlas.dispose();
-        if (imgH2 != null) imgH2.dispose();
-        if (imgH3 != null) imgH3.dispose();
         if (sndHit != null) sndHit.dispose();
-        if (sndHitAlien != null) sndHitAlien.dispose();
-        if (sndHitCan != null) sndHitCan.dispose();
         if (music != null) music.dispose();
     }
 }

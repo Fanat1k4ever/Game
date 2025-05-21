@@ -1,25 +1,23 @@
 package ru.samsung.game;
 
-import java.util.Arrays;
-
 public class Player {
     String name = "Noname";
-    int score;
-    int[] MPassed = new int[4];
-    int kills;
+    long time;
 
     public void clear(){
-        score = 0;
-        Arrays.fill(MPassed, 0);
-        kills = 0;
+        time = 0;
     }
 
-    public void clone(Player p) {
-        name = p.name;
-        score = p.score;
-        for (int i = 0; i < MPassed.length; i++) {
-            MPassed[i] = p.MPassed[i];
-        }
-        kills = p.kills;
+    public Player() {
+    }
+
+    public Player(String name, long time) {
+        this.name = name;
+        this.time = time;
+    }
+
+    public void set(String name, long time) {
+        this.name = name;
+        this.time = time;
     }
 }
